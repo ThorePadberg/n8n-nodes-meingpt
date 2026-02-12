@@ -1,0 +1,52 @@
+{
+  "name": "n8n-nodes-meingpt",
+  "version": "0.1.0",
+  "description": "n8n community node for meinGPT",
+  "license": "MIT",
+  "homepage": "https://meingpt.com",
+  "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ThorePadberg/n8n-nodes-meingpt.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ThorePadberg/n8n-nodes-meingpt/issues"
+  },
+  "keywords": [
+    "n8n-community-node-package"
+  ],
+  "author": {
+    "name": "Thore Padberg"
+  },
+  "scripts": {
+    "build": "n8n-node build",
+    "dev": "n8n-node dev",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "prepublishOnly": "npm run build"
+  },
+  "files": [
+    "dist"
+  ],
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "strict": true,
+    "credentials": [
+      "dist/credentials/MeinGptApi.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/MeinGpt/MeinGpt.node.js"
+    ]
+  },
+  "devDependencies": {
+    "@n8n/node-cli": "0.19.0",
+    "@types/node": "^20.0.0",
+    "eslint": "^9.32.0",
+    "n8n-workflow": "2.7.0",
+    "prettier": "^3.6.2",
+    "typescript": "~5.7.0"
+  },
+  "peerDependencies": {
+    "n8n-workflow": ">=2.7.0"
+  }
+}
