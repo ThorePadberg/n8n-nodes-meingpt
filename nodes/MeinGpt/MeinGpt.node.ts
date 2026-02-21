@@ -28,9 +28,9 @@ export class MeinGpt implements INodeType {
 		name: 'meinGpt',
 		icon: 'file:meingpt.svg',
 		group: ['transform'],
-			version: 1,
-			subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
-			description: 'Interact with meinGPT',
+		version: 1,
+		subtitle: '={{$parameter["resource"] + ": " + $parameter["operation"]}}',
+		description: 'Interact with meinGPT',
 		defaults: {
 			name: 'meinGPT',
 		},
@@ -114,9 +114,9 @@ export class MeinGpt implements INodeType {
 			},
 
 			// ===== Chat: Send Message Parameters =====
-				{
-					displayName: 'Model',
-					name: 'model',
+			{
+				displayName: 'Model',
+				name: 'model',
 				type: 'options',
 				required: true,
 				displayOptions: { show: { resource: ['chat'], operation: ['sendMessage'] } },
@@ -127,11 +127,11 @@ export class MeinGpt implements INodeType {
 					{ name: 'Anthropic: Claude Opus 4.5', value: 'claude-opus-4-5@20251101' },
 					{ name: 'Anthropic: Claude Sonnet 4', value: 'claude-sonnet-4' },
 					{ name: 'Anthropic: Claude Sonnet 4.5', value: 'claude-sonnet-4-5' },
-						{ name: 'DeepSeek: R1', value: 'deepseek-r1' },
-						{ name: 'DeepSeek: V3', value: 'deepseek-v3' },
-						{ name: 'Google: Gemini 2.5 Flash', value: 'gemini-2.5-flash' },
-						{ name: 'Google: Gemini 2.5 Pro', value: 'gemini-2.5-pro' },
-						{ name: 'Google: Gemini 3 Flash', value: 'gemini-3-flash' },
+					{ name: 'DeepSeek: R1', value: 'deepseek-r1' },
+					{ name: 'DeepSeek: V3', value: 'deepseek-v3' },
+					{ name: 'Google: Gemini 2.5 Flash', value: 'gemini-2.5-flash' },
+					{ name: 'Google: Gemini 2.5 Pro', value: 'gemini-2.5-pro' },
+					{ name: 'Google: Gemini 3 Flash', value: 'gemini-3-flash' },
 					{ name: 'Google: Gemini 3 Pro', value: 'gemini-3-pro' },
 					{ name: 'Mistral: Codestral', value: 'codestral' },
 					{ name: 'Mistral: Magistral Medium', value: 'magistral-medium' },
@@ -152,9 +152,9 @@ export class MeinGpt implements INodeType {
 					{ name: 'OpenAI: o4-mini', value: 'o4-mini' },
 					{ name: 'Perplexity: Sonar', value: 'sonar' },
 					{ name: 'Perplexity: Sonar Deep Research', value: 'sonar-deep-research' },
-					],
-					default: 'gpt-4o',
-					description: 'Model to use for the request',
+				],
+				default: 'gpt-4o',
+				description: 'Model to use for the request',
 			},
 			{
 				displayName: 'User Message',
@@ -198,11 +198,11 @@ export class MeinGpt implements INodeType {
 				type: 'options',
 				displayOptions: { show: { resource: ['chat'], operation: ['sendMessage'] } },
 				default: 'text',
-					options: [
-						{ name: 'Text', value: 'text' },
-						{ name: 'JSON Object', value: 'json_object' },
-					],
-					description: 'Force a valid JSON object response',
+				options: [
+					{ name: 'Text', value: 'text' },
+					{ name: 'JSON Object', value: 'json_object' },
+				],
+				description: 'Force a valid JSON object response',
 			},
 
 			// ===== Assistant: Execute Parameters =====
@@ -216,7 +216,8 @@ export class MeinGpt implements INodeType {
 					loadOptionsMethod: 'getAssistants',
 				},
 				default: '',
-				description: 'The assistant to execute. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
+				description:
+					'The assistant to execute. Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 			},
 			{
 				displayName: 'Message',
@@ -243,10 +244,10 @@ export class MeinGpt implements INodeType {
 				name: 'workflowId',
 				type: 'string',
 				required: true,
-					displayOptions: { show: { resource: ['workflow'], operation: ['execute'] } },
-					default: '',
-					description:
-						'The workflow to execute. Provide a workflow ID directly or a meinGPT workflow URL via expression.',
+				displayOptions: { show: { resource: ['workflow'], operation: ['execute'] } },
+				default: '',
+				description:
+					'The workflow to execute. Provide a workflow ID directly or a meinGPT workflow URL via expression.',
 			},
 			{
 				displayName: 'Input Variables',
@@ -265,29 +266,37 @@ export class MeinGpt implements INodeType {
 								name: 'name',
 								type: 'string',
 								default: '',
-								placeholder: 'z.B. customer_name',
+								placeholder: 'e.g. customer_name',
 							},
 							{
 								displayName: 'Value',
 								name: 'value',
 								type: 'string',
 								default: '',
-								placeholder: 'z.B. Max Mustermann',
+								placeholder: 'e.g. John Doe',
 							},
 						],
 					},
-					],
-					description: 'Input variables for the workflow',
-				},
-			],
-			usableAsTool: true,
-		};
+				],
+				description: 'Input variables for the workflow',
+			},
+			{
+				displayName: 'Language',
+				name: 'language',
+				type: 'string',
+				displayOptions: { show: { resource: ['workflow'], operation: ['execute'] } },
+				default: '',
+				placeholder: 'e.g. en',
+				description:
+					'Language for the workflow response (ISO 639-1 code, e.g. "en", "de", "fr"). Leave empty for the API default.',
+			},
+		],
+		usableAsTool: true,
+	};
 
 	methods = {
 		loadOptions: {
-			async getAssistants(
-				this: ILoadOptionsFunctions,
-			): Promise<INodePropertyOptions[]> {
+			async getAssistants(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
 				try {
 					const response = await this.helpers.httpRequestWithAuthentication.call(
 						this,
@@ -311,12 +320,12 @@ export class MeinGpt implements INodeType {
 						assistants = response.data;
 					}
 
-						return assistants
-							.filter((a) => a.name && a.name.trim() !== '')
-							.map((a) => ({
-								name: `${a.name} (${a.id.substring(0, 8)}...)`,
-								value: a.id,
-							}));
+					return assistants
+						.filter((a) => a.name && a.name.trim() !== '')
+						.map((a) => ({
+							name: `${a.name} (${a.id.substring(0, 8)}...)`,
+							value: a.id,
+						}));
 				} catch {
 					return [{ name: 'Unable To Load Assistants - Check API Key', value: '' }];
 				}
@@ -369,22 +378,16 @@ export class MeinGpt implements INodeType {
 				let responseData: IDataObject | IDataObject[] | undefined;
 
 				// ===== CHAT: Send Message =====
-					if (resource === 'chat' && operation === 'sendMessage') {
-						const model = this.getNodeParameter('model', i) as string;
-						const userMessage = this.getNodeParameter('userMessage', i) as string;
-						if (!userMessage.trim()) {
-							throw new NodeOperationError(this.getNode(), 'User Message cannot be empty.', { itemIndex: i });
-						}
-					const systemMessage = this.getNodeParameter(
-						'systemMessage',
-						i,
-						'',
-					) as string;
-					const temperature = this.getNodeParameter(
-						'temperature',
-						i,
-						0.7,
-					) as number;
+				if (resource === 'chat' && operation === 'sendMessage') {
+					const model = this.getNodeParameter('model', i) as string;
+					const userMessage = this.getNodeParameter('userMessage', i) as string;
+					if (!userMessage.trim()) {
+						throw new NodeOperationError(this.getNode(), 'User Message cannot be empty.', {
+							itemIndex: i,
+						});
+					}
+					const systemMessage = this.getNodeParameter('systemMessage', i, '') as string;
+					const temperature = this.getNodeParameter('temperature', i, 0.7) as number;
 					const maxTokens = this.getNodeParameter('maxTokens', i, 0) as number;
 
 					const messages: Array<{ role: string; content: string }> = [];
@@ -407,18 +410,17 @@ export class MeinGpt implements INodeType {
 						body.response_format = { type: 'json_object' };
 					}
 
-					const chatResponse =
-						await this.helpers.httpRequestWithAuthentication.call(
-							this,
-								'meinGptApi',
-								{
-									method: 'POST',
-									url: `${BASE_URL}/openai/v1/chat/completions`,
-									body,
-									json: true,
-									timeout: REQUEST_TIMEOUT_MS,
-								},
-							);
+					const chatResponse = await this.helpers.httpRequestWithAuthentication.call(
+						this,
+						'meinGptApi',
+						{
+							method: 'POST',
+							url: `${BASE_URL}/openai/v1/chat/completions`,
+							body,
+							json: true,
+							timeout: REQUEST_TIMEOUT_MS,
+						},
+					);
 
 					const usage = chatResponse.usage;
 					const content = chatResponse.choices?.[0]?.message?.content ?? '';
@@ -432,111 +434,96 @@ export class MeinGpt implements INodeType {
 						},
 						finish_reason: chatResponse.choices?.[0]?.finish_reason ?? '',
 						id: chatResponse.id,
-							...((!chatResponse.choices || chatResponse.choices.length === 0) && {
-								warning: 'API returned no choices. The model may have been unable to generate a response.',
-							}),
-						};
-					}
+						...((!chatResponse.choices || chatResponse.choices.length === 0) && {
+							warning:
+								'API returned no choices. The model may have been unable to generate a response.',
+						}),
+					};
+				}
 
 				// ===== ASSISTANT: List =====
 				else if (resource === 'assistant' && operation === 'list') {
-					responseData =
-						await this.helpers.httpRequestWithAuthentication.call(
-							this,
-								'meinGptApi',
-								{
-									method: 'GET',
-									url: `${BASE_URL}/assistants/v1/`,
-									json: true,
-									timeout: REQUEST_TIMEOUT_MS,
-								},
-							);
-					}
+					responseData = await this.helpers.httpRequestWithAuthentication.call(this, 'meinGptApi', {
+						method: 'GET',
+						url: `${BASE_URL}/assistants/v1/`,
+						json: true,
+						timeout: REQUEST_TIMEOUT_MS,
+					});
+				}
 
 				// ===== ASSISTANT: Execute =====
 				else if (resource === 'assistant' && operation === 'execute') {
 					const assistantIdRaw = this.getNodeParameter('assistantId', i) as string;
 					const assistantId = extractIdFromUrlOrId(assistantIdRaw);
-						if (!assistantId) {
-							throw new NodeOperationError(
-								this.getNode(),
-								`Invalid ID format: "${assistantIdRaw.trim()}". Expected: alphanumeric ID, underscore, hyphen, or meinGPT URL.`,
-								{ itemIndex: i },
-							);
-						}
-						const message = this.getNodeParameter('message', i) as string;
-						if (!message.trim()) {
-							throw new NodeOperationError(this.getNode(), 'Message cannot be empty.', { itemIndex: i });
-						}
-						const additionalInputsRaw = this.getNodeParameter(
-							'additionalInputs',
-							i,
-							'{}',
-						) as string;
-
-						let additionalInputs: Record<string, unknown> = {};
-						try {
-							const parsedInputs =
-								typeof additionalInputsRaw === 'string'
-									? JSON.parse(additionalInputsRaw)
-									: additionalInputsRaw;
-							additionalInputs = parsedInputs as Record<string, unknown>;
-						} catch {
-							throw new NodeOperationError(
-								this.getNode(),
-								'Additional Inputs must be valid JSON',
-								{ itemIndex: i },
-							);
-						}
-						if (
-							!additionalInputs ||
-							typeof additionalInputs !== 'object' ||
-							Array.isArray(additionalInputs)
-						) {
-							throw new NodeOperationError(
-								this.getNode(),
-								'Additional Inputs must be a JSON object',
-								{ itemIndex: i },
-							);
-						}
-
-						const body: Record<string, unknown> = {
-							...additionalInputs,
-							message,
-							messages: [{ role: 'user', content: message }],
-						};
-
-						responseData =
-							await this.helpers.httpRequestWithAuthentication.call(
-								this,
-								'meinGptApi',
-								{
-									method: 'POST',
-									url: `${BASE_URL}/assistants/v1/${assistantId}/run`,
-									body,
-									json: true,
-									timeout: REQUEST_TIMEOUT_MS,
-								},
-							);
+					if (!assistantId) {
+						throw new NodeOperationError(
+							this.getNode(),
+							`Invalid ID format: "${assistantIdRaw.trim()}". Expected: alphanumeric ID, underscore, hyphen, or meinGPT URL.`,
+							{ itemIndex: i },
+						);
 					}
+					const message = this.getNodeParameter('message', i) as string;
+					if (!message.trim()) {
+						throw new NodeOperationError(this.getNode(), 'Message cannot be empty.', {
+							itemIndex: i,
+						});
+					}
+					const additionalInputsRaw = this.getNodeParameter('additionalInputs', i, '{}') as string;
+
+					let additionalInputs: Record<string, unknown> = {};
+					try {
+						const parsedInputs =
+							typeof additionalInputsRaw === 'string'
+								? JSON.parse(additionalInputsRaw)
+								: additionalInputsRaw;
+						additionalInputs = parsedInputs as Record<string, unknown>;
+					} catch {
+						throw new NodeOperationError(this.getNode(), 'Additional Inputs must be valid JSON', {
+							itemIndex: i,
+						});
+					}
+					if (
+						!additionalInputs ||
+						typeof additionalInputs !== 'object' ||
+						Array.isArray(additionalInputs)
+					) {
+						throw new NodeOperationError(
+							this.getNode(),
+							'Additional Inputs must be a JSON object',
+							{ itemIndex: i },
+						);
+					}
+
+					const body: Record<string, unknown> = {
+						...additionalInputs,
+						message,
+						messages: [{ role: 'user', content: message }],
+					};
+
+					responseData = await this.helpers.httpRequestWithAuthentication.call(this, 'meinGptApi', {
+						method: 'POST',
+						url: `${BASE_URL}/assistants/v1/${assistantId}/run`,
+						body,
+						json: true,
+						timeout: REQUEST_TIMEOUT_MS,
+					});
+				}
 
 				// ===== WORKFLOW: Execute =====
 				else if (resource === 'workflow' && operation === 'execute') {
 					const workflowIdRaw = this.getNodeParameter('workflowId', i) as string;
 					const workflowId = extractIdFromUrlOrId(workflowIdRaw);
-						if (!workflowId) {
-							throw new NodeOperationError(
-								this.getNode(),
-								`Invalid ID format: "${workflowIdRaw.trim()}". Expected: alphanumeric ID, underscore, hyphen, or meinGPT URL.`,
-								{ itemIndex: i },
-							);
-						}
+					if (!workflowId) {
+						throw new NodeOperationError(
+							this.getNode(),
+							`Invalid ID format: "${workflowIdRaw.trim()}". Expected: alphanumeric ID, underscore, hyphen, or meinGPT URL.`,
+							{ itemIndex: i },
+						);
+					}
 
-					const inputVariables = this.getNodeParameter(
-						'inputVariables',
-						i,
-						{},
-					) as { variable?: Array<{ name: string; value: string }> };
+					const inputVariables = this.getNodeParameter('inputVariables', i, {}) as {
+						variable?: Array<{ name: string; value: string }>;
+					};
 
 					const input: Record<string, string> = {};
 					if (inputVariables.variable) {
@@ -545,24 +532,24 @@ export class MeinGpt implements INodeType {
 						}
 					}
 
-					responseData =
-						await this.helpers.httpRequestWithAuthentication.call(
-							this,
-								'meinGptApi',
-								{
-									method: 'POST',
-									url: `${BASE_URL}/workflows/v1/${workflowId}/run`,
-									body: { input },
-									json: true,
-									timeout: REQUEST_TIMEOUT_MS,
-								},
-							);
+					const language = this.getNodeParameter('language', i, '') as string;
+
+					const workflowBody: Record<string, unknown> = { input };
+					if (language) {
+						workflowBody.language = language;
 					}
 
-				else {
+					responseData = await this.helpers.httpRequestWithAuthentication.call(this, 'meinGptApi', {
+						method: 'POST',
+						url: `${BASE_URL}/workflows/v1/${workflowId}/run`,
+						body: workflowBody,
+						json: true,
+						timeout: REQUEST_TIMEOUT_MS,
+					});
+				} else {
 					throw new NodeOperationError(
 						this.getNode(),
-						`Unbekannte Resource/Operation: ${resource}/${operation}`,
+						`Unknown resource/operation: ${resource}/${operation}`,
 						{ itemIndex: i },
 					);
 				}
@@ -583,21 +570,21 @@ export class MeinGpt implements INodeType {
 				}
 			} catch (error) {
 				if (this.continueOnFail()) {
-						returnData.push({
-							json: {
-								error: getSafeErrorMessage(error),
-								statusCode: getStatusCode(error) ?? null,
-							},
-							pairedItem: { item: i },
-						});
-						continue;
-					}
+					returnData.push({
+						json: {
+							error: getSafeErrorMessage(error),
+							statusCode: getStatusCode(error) ?? null,
+						},
+						pairedItem: { item: i },
+					});
+					continue;
+				}
 
-					const statusCode = getStatusCode(error);
+				const statusCode = getStatusCode(error);
 
-					if (statusCode && errorMessages[statusCode]) {
-						throw new NodeOperationError(this.getNode(), errorMessages[statusCode], { itemIndex: i });
-					}
+				if (statusCode && errorMessages[statusCode]) {
+					throw new NodeOperationError(this.getNode(), errorMessages[statusCode], { itemIndex: i });
+				}
 				throw new NodeApiError(this.getNode(), error as JsonObject, { itemIndex: i });
 			}
 		}

@@ -8,8 +8,11 @@ import {
 export class MeinGptApi implements ICredentialType {
 	name = 'meinGptApi';
 	displayName = 'meinGPT API';
-	icon = { light: 'file:../nodes/MeinGpt/meingpt.svg', dark: 'file:../nodes/MeinGpt/meingpt.svg' } as const;
-	documentationUrl = 'https://docs.meingpt.com/de/developer';
+	icon = {
+		light: 'file:../nodes/MeinGpt/meingpt.svg',
+		dark: 'file:../nodes/MeinGpt/meingpt.svg',
+	} as const;
+	documentationUrl = 'https://docs.meingpt.com/en/developer';
 
 	properties: INodeProperties[] = [
 		{

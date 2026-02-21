@@ -1,8 +1,8 @@
 # n8n-nodes-meingpt
 
-Official community node for using [meinGPT](https://meingpt.com) in n8n workflows.
+Community node for using [meinGPT](https://meingpt.com) in n8n workflows.
 
-meinGPT provides a DSGVO-focused AI platform for companies. This node lets you call meinGPT chat, assistants, and workflows directly from n8n.
+meinGPT provides a GDPR-compliant AI platform for companies. This node lets you call meinGPT chat, assistants, and workflows directly from n8n.
 
 ## Features
 
@@ -74,6 +74,7 @@ Required:
 Optional:
 
 - `Input Variables` (name/value pairs)
+- `Language` (ISO 639-1 code, e.g. "en", "de")
 
 ## Output
 

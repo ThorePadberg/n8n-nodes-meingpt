@@ -1,7 +1,7 @@
 {
   "name": "n8n-nodes-meingpt",
-  "version": "0.1.0",
-  "description": "n8n community node for meinGPT",
+  "version": "1.0.0",
+  "description": "n8n community node for meinGPT - GDPR-compliant AI platform for enterprises. Supports Chat Completions, Assistants, and Workflows.",
   "license": "MIT",
   "homepage": "https://meingpt.com",
   "main": "dist/index.js",
@@ -13,10 +13,18 @@
     "url": "https://github.com/ThorePadberg/n8n-nodes-meingpt/issues"
   },
   "keywords": [
-    "n8n-community-node-package"
+    "n8n-community-node-package",
+    "n8n",
+    "meingpt",
+    "ai",
+    "gdpr",
+    "llm",
+    "enterprise"
   ],
   "author": {
-    "name": "Thore Padberg"
+    "name": "SelectCode GmbH",
+    "email": "support@meingpt.com",
+    "url": "https://meingpt.com"
   },
   "scripts": {
     "build": "n8n-node build",
